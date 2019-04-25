@@ -1,0 +1,22 @@
+{{- if .Values.persistentVolume.enabled -}}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ template "self.fullname" . }}
+  labels:
+{{ include "self.labels" . | indent 4 }}
+    purpose: {{ .Values.persistentVolume.purpose }}
+spec:
+  capacity:
+    storage: {{ .Values.persistentVolume.capacity.storage }}
+  hostPath:
+    {{- if .Values.persistentVolume.baseSubPathEnabled }}
+    path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}/{{ .Values.persistentVolume.baseSubPath }}
+    {{- else }}
+    path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}
+    {{- end }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+{{- end }}

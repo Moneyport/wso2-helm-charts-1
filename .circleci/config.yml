@@ -1,0 +1,50 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+
+defaults_working_directory: &defaults_working_directory
+  working_directory: ~/repo
+
+defaults_docker_helm_kube: &defaults_docker_helm_kube
+  docker:
+    - image: hypnoglow/kubernetes-helm:2.9.1
+
+
+jobs:
+
+  build:
+    <<: *defaults_working_directory
+    <<: *defaults_docker_helm_kube
+    steps:
+      - checkout
+      - run:
+          name: Package and update Helm repo...
+          command: |
+            apk --no-cache add git
+            git clone https://$GIT_CICD_USER_KEY@g$GIT_HELM_URL
+            ./build.sh ./workdir $CIRCLE_TAG
+            ./package.sh ./workdir ./wso2-repo/wso2-helm
+            cd wso2-repo
+            git config --global user.name "cicduser"
+            git config --global user.email "cicduser@example.com"
+            git add .
+            git commit -m "CircleCI automated push due to wso2-helm-charts commit"
+            git push
+
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          context: org-global
+          filters:
+            tags:
+              only: /^[0-9]+(\.[0-9]+)+(\.[0-9]+)$/
+            branches:
+              ignore:
+                - /.*/
+                - /feature*/
+                - /bugfix*/

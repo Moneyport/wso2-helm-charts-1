@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "self.fullname" . }}-bin
+  labels:
+ {{ include "self.labels" . | indent 4 }}
+data:
+{{ (.Files.Glob "bin/*").AsConfig | indent 2 }}

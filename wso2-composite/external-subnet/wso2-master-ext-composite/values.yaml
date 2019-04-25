@@ -1,0 +1,9 @@
+# override default values.
+
+wso2-am-allinone-ext:
+
+  enabled: true
+  image:
+    tag: DEPLOYMENT_VALUE
+  config:
+    environment: DEPLOYMENT_VALUE

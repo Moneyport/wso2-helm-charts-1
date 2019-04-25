@@ -1,0 +1,109 @@
+# Default values for wso2am.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+productName: wso2am
+productVersion: 2.5.0
+wso2Home: /home/wso2carbon
+wso2amSecretVolPath: /home/wso2carbon/wso2-secret-volume
+wso2amConfigVolPath: /home/wso2carbon/wso2-config-volume
+wso2amLibVolPath: /home/wso2carbon/wso2-lib-volume
+rollingUpdate:
+  maxSurge: 1
+  maxUnavailable: 0
+image:
+  repositoryPath: mojaloop-docker-release.jfrog.io
+  tag: DEPLOYMENT_VALUE
+  pullPolicy: Always
+  dockerImageName: wso2am-docker
+service:
+  type: NodePort
+  ports:
+    wso2:
+      enabled: true
+      name: wso2
+      externalPort: 9443
+      internalPort: 32443
+      targetPort: 9443
+    wso2https:
+      enabled: true
+      name: wso2https
+      externalPort: 8243
+      internalPort: 32243
+      targetPort: 8243
+  sessionAffinity: 
+    enabled: false
+    affinityType: ClientIP
+  external:
+    enabled: true
+  annotations: {}
+
+rbac:
+  serviceAccount: wso2svc-account
+  enabled: false
+
+config:
+  pullSecret: dock-repo-secret
+# dependentServices:
+#   wso2-is-km:
+#     name: wso2-is-km
+#     pauseTime: 15  
+persistentVolume:
+  enabled: false
+  basePath: /glusterfs
+  baseSubPathEnabled: false
+  purpose: wso2apim-gateway-shared-artifacts
+  mountToSubPath: repository/deployment/server
+  capacity: 
+    storage: 5Gi
+  fsowner:
+    userid: "802"
+    groupid: "802"
+  pvcNameOverride:
+    enabled: false
+    pvcName: FILLIFTRUE
+  subPathEnbled: false
+onlyMountPVC:
+  enabled: false
+  pvcName: FILLIFTRUE
+  mountToSubPath: repository/deployment/server
+  subPathEnbled: false
+  subPath: /
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 300
+  periodSeconds: 15
+  failureThreshold: 5
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 360
+  periodSeconds: 15
+  failureThreshold: 5
+
+
+copyExtHostToEtcHosts:
+  enabled: false
+  extHostName: wso2exthostname
+
+ingress:
+  enabled: false
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    memory: 3Gi
+    cpu: 3000m
+  requests:
+    memory: 2Gi
+    cpu: 2000m
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "self.fullname" . }}
+  labels:
+ {{ include "self.labels" . | indent 4 }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    {{- range $port := .Values.service.ports }}
+    {{- if $port.enabled }}    
+    - port: {{ $port.externalPort }}
+      targetPort: {{ $port.targetPort }}
+      nodePort: {{ $port.internalPort }}
+      protocol: TCP
+      name: {{ $port.name }}
+    {{- end -}}
+    {{- end -}}
+  {{- if .Values.service.sessionAffinity.enabled }}
+  sessionAffinity: {{ .Values.service.sessionAffinity.affinityType }}
+  {{- end -}}
+{{- if .Values.service.external.enabled }}
+  selector:
+    app: {{ template "self.fullname" . }}
+    release: {{ .Release.Name }}
+{{- end -}}
