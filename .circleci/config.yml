@@ -9,31 +9,45 @@ defaults_working_directory: &defaults_working_directory
 
 defaults_docker_helm_kube: &defaults_docker_helm_kube
   docker:
-    - image: wernight/kubectl
+    - image: hypnoglow/kubernetes-helm:2.9.1
 
 
 jobs:
-
   build:
+    <<: *defaults_working_directory
+    <<: *defaults_docker_helm_kube
+    steps:
+      - checkout
+      - run: 
+          name: Build Chart packages
+          command: |
+            ./build.sh ./workdir $CIRCLE_TAG
+            ./package.sh ./workdir ./wso2-repo/wso2-helm
+      # save Chart packages
+      - save_cache:
+          key: repo-cache-{{ .Branch }}-{{ .Revision }}
+          paths: repo
+
+  publish:
     <<: *defaults_working_directory
     machine: true
     #<<: *defaults_docker_helm_kube
     steps:
       - checkout
       - run:
-          name: Package and update Helm repo...
-          command: |
-            ./build.sh ./workdir $CIRCLE_TAG
-            ./package.sh ./workdir ./wso2-repo/wso2-helm
-            git checkout origin gh-pages
-            git pull origin master
-            git add ./wso2-repo
-            git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
-            git push origin
+          name: checkout branch that houses helm repo...
+          command: git checkout origin gh-pages
+      - restore_cache:
+          keys: repo-cache-{{ .Branch }}-{{ .Revision }}
+      - run: |
+          git pull origin master
+          git add ./wso2-repo
+          git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
+          git push origin     
 
 workflows:
   version: 2
-  build_and_deploy:
+  build_and_publish:
     jobs:
       - build:
           context: org-global
@@ -41,7 +55,15 @@ workflows:
             tags:
               only: /^[0-9]+(\.[0-9]+)+(\.[0-9]+)$/
             branches:
-              ignore:
-                - /.*/
-                - /feature*/
-                - /bugfix*/
+              only:
+                - master
+      - publish:
+          context: org-global
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^[0-9]+(\.[0-9]+)+(\.[0-9]+)$/
+            branches:
+              only:
+                - master
