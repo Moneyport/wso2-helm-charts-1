@@ -36,7 +36,7 @@ jobs:
       - checkout
       - run: 
           name: Checkout gh-pages branch
-          command: git checkout origin gh-pages
+          command: git fetch origin gh-pages:refs/remotes/origin/gh-pages && git checkout origin gh-pages
       - restore_cache:
           keys: repo-cache-{{ .Branch }}-{{ .Revision }}
       - run: 
