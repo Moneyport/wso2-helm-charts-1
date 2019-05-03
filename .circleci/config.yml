@@ -9,7 +9,7 @@ defaults_working_directory: &defaults_working_directory
 
 defaults_docker_helm_kube: &defaults_docker_helm_kube
   docker:
-    - image: hypnoglow/kubernetes-helm:2.9.1
+    - image: wernight/kubectl
 
 
 jobs:
@@ -22,7 +22,6 @@ jobs:
       - run:
           name: Package and update Helm repo...
           command: |
-            apk --no-cache add git
             ./build.sh ./workdir $CIRCLE_TAG
             ./package.sh ./workdir ./wso2-repo/wso2-helm
             git checkout origin gh-pages
