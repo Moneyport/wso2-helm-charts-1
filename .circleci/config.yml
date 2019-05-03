@@ -34,16 +34,23 @@ jobs:
     #<<: *defaults_docker_helm_kube
     steps:
       - checkout
-      - run:
-          name: checkout branch that houses helm repo...
+      - run: 
+          name: Checkout gh-pages branch
           command: git checkout origin gh-pages
       - restore_cache:
           keys: repo-cache-{{ .Branch }}-{{ .Revision }}
-      - run: |
-          git pull origin master
-          git add ./wso2-repo
-          git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
-          git push origin     
+      - run: 
+          name: Murge origin master into gh-pages branch
+          command: git pull origin master
+      - run: 
+          name: Add repo to gh-pages branch
+          command: git add ./wso2-repo
+      - run: 
+          name: Commit changes to gh-pages branch
+          command: git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
+      - run: 
+          name: Publish gh-pages
+          command: git push origin    
 
 workflows:
   version: 2
