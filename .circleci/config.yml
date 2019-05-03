@@ -23,7 +23,6 @@ jobs:
       - run:
           name: Package and update Helm repo...
           command: |
-            cd repo
             ./build.sh ./workdir $CIRCLE_TAG
             ./package.sh ./workdir ./wso2-repo/wso2-helm
             git checkout origin gh-pages
