@@ -23,7 +23,6 @@ jobs:
           name: Package and update Helm repo...
           command: |
             apk --no-cache add git
-            git clone https://$GIT_CICD_USER_KEY@$GIT_HELM_URL
             ./build.sh ./workdir $CIRCLE_TAG
             ./package.sh ./workdir ./wso2-repo/wso2-helm
             git checkout origin gh-pages
@@ -31,7 +30,7 @@ jobs:
             git add ./wso2-repo
             git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
             git push origin
-            
+
 workflows:
   version: 2
   build_and_deploy:
