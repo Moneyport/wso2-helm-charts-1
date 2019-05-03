@@ -16,12 +16,14 @@ jobs:
 
   build:
     <<: *defaults_working_directory
-    <<: *defaults_docker_helm_kube
+    machine: true
+    #<<: *defaults_docker_helm_kube
     steps:
       - checkout
       - run:
           name: Package and update Helm repo...
           command: |
+            cd repo
             ./build.sh ./workdir $CIRCLE_TAG
             ./package.sh ./workdir ./wso2-repo/wso2-helm
             git checkout origin gh-pages
