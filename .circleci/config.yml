@@ -35,6 +35,7 @@ jobs:
     <<: *defaults_docker_node
     #<<: *defaults_docker_helm_kube
     steps:
+      - checkout
       - run: 
           name: Checkout gh-pages branch
           command: git checkout origin gh-pages
