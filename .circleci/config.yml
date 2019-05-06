@@ -69,9 +69,6 @@ defaults_publish_to_gh_pages: &defaults_publish_to_gh_pages
     ./build.sh ./workdir $CIRCLE_TAG
     ./package.sh ./workdir ./wso2-repo/wso2-helm
 
-    echo "Staging general changes..."
-    git add .
-
     echo "Staging packaged Helm charts..."
     git add -f wso2-repo/*.*
 
