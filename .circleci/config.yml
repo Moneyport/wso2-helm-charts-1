@@ -101,7 +101,8 @@ jobs:
       - run:
           name: Linting Helm Charts
           command: |
-            sh lint-charts.sh
+            echo "Placeholder for test - Nothing to do here"
+            #sh lint-charts.sh
 
   build:
     <<: *defaults_working_directory
