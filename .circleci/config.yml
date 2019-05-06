@@ -65,13 +65,15 @@ defaults_publish_to_gh_pages: &defaults_publish_to_gh_pages
     git pull -q $GITHUB_PROJECT_USERNAME $GITBOOK_TARGET_BRANCH --rebase &> git.log
 
     echo "Package helm charts..."
-    sh package.sh
+    rm -rf ./workdir
+    ./build.sh ./workdir $CIRCLE_TAG
+    ./package.sh ./workdir ./wso2-repo/wso2-helm
 
     echo "Staging general changes..."
     git add .
 
     echo "Staging packaged Helm charts..."
-    git add -f repo/*.*
+    git add -f wso2-repo/*.*
 
     echo "Commiting changes..."
     git commit -a -m "Updating release to $GITHUB_TAG"
