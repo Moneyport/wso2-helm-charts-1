@@ -36,14 +36,17 @@ jobs:
     #<<: *defaults_docker_helm_kube
     steps:
       - checkout
+      - run:
+          name: name remote
+          command: git remote add $GITHUB_PROJECT_USERNAME https://$GIT_CI_USER:$GITHUB_TOKEN@github.com/$GITHUB_PROJECT_USERNAME/$GITHUB_PROJECT_REPONAME.git
       - run: 
           name: Checkout gh-pages branch
-          command: git checkout origin gh-pages
+          command: git checkout $GITHUB_PROJECT_USERNAME gh-pages
       - restore_cache:
           keys: repo-cache-{{ .Branch }}-{{ .Revision }}
       - run: 
           name: Murge origin master into gh-pages branch
-          command: git pull origin master
+          command: git pull $GITHUB_PROJECT_USERNAME master
       - run: 
           name: Add repo to gh-pages branch
           command: git add ./wso2-repo
@@ -52,7 +55,7 @@ jobs:
           command: git commit -m "Publishing $(date '+%Y%m%d-%H%M%S')"
       - run: 
           name: Publish gh-pages
-          command: git push origin    
+          command: git push $GITHUB_PROJECT_USERNAME    
 
 workflows:
   version: 2
