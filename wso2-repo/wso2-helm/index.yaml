@@ -2,7 +2,19 @@ apiVersion: v1
 entries:
   wso2-master-ext-composite:
   - apiVersion: v1
-    created: 2019-05-15T14:31:23.927292237Z
+    created: 2019-05-31T09:40:25.823805763Z
+    description: Master Helm chart WSO2 "composite" profile composed by internal API
+      manager, external API Manager and Identity Server
+    digest: 0fc247d440f78dbe5e54054a25ee24388f5c8c81d4702ca04c8a05604615b9a9
+    maintainers:
+    - email: david.fry@modusbox.com
+      name: David Fry
+    name: wso2-master-ext-composite
+    urls:
+    - wso2-master-ext-composite-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v1
+    created: 2019-05-31T09:40:25.823095668Z
     description: Master Helm chart WSO2 "composite" profile composed by internal API
       manager, external API Manager and Identity Server
     digest: 8942dc913c2947563633ca5d592816fab64538804acfe7be1fc8ef497161ede9
@@ -14,7 +26,7 @@ entries:
     - wso2-master-ext-composite-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v1
-    created: 2019-05-15T14:31:23.926878312Z
+    created: 2019-05-31T09:40:25.822410326Z
     description: Master Helm chart WSO2 "composite" profile composed by internal API
       manager, external API Manager and Identity Server
     digest: 944187477fed5b9000b7b5fef0fdfdc8ea2d83482aff62e230e010f2c4877c18
@@ -27,7 +39,19 @@ entries:
     version: 0.0.15
   wso2-master-int-composite:
   - apiVersion: v1
-    created: 2019-05-15T14:31:23.928445039Z
+    created: 2019-05-31T09:40:25.827352849Z
+    description: Master Helm chart WSO2 "composite" profile composed by internal API
+      manager and Identity Server
+    digest: 2a695b80d121d243181a4521a7870f21288dc260c7e29d3c3a6e4267c994b0b7
+    maintainers:
+    - email: david.fry@modusbox.com
+      name: David Fry
+    name: wso2-master-int-composite
+    urls:
+    - wso2-master-int-composite-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v1
+    created: 2019-05-31T09:40:25.825703221Z
     description: Master Helm chart WSO2 "composite" profile composed by internal API
       manager and Identity Server
     digest: 7a4b286c513b0a28369b5dc28dd03a6e8daceb70f8916b74b71f9da9f4df3c70
@@ -39,7 +63,7 @@ entries:
     - wso2-master-int-composite-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v1
-    created: 2019-05-15T14:31:23.927879336Z
+    created: 2019-05-31T09:40:25.824798651Z
     description: Master Helm chart WSO2 "composite" profile composed by internal API
       manager and Identity Server
     digest: 3be277fbf31c4b9dc6c49cefc6abaed08434635f5fda184a1e43baa0d3504bbd
@@ -50,4 +74,4 @@ entries:
     urls:
     - wso2-master-int-composite-0.0.15.tgz
     version: 0.0.15
-generated: 2019-05-15T14:31:23.926282123Z
+generated: 2019-05-31T09:40:25.821577084Z
