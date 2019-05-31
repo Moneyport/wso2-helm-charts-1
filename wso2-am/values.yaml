@@ -13,10 +13,10 @@ rollingUpdate:
   maxSurge: 1
   maxUnavailable: 0
 image:
-  repositoryPath: mojaloop-docker-release.jfrog.io
+  repositoryPath: hub.docker.com/r/mojaloop
   tag: DEPLOYMENT_VALUE
   pullPolicy: Always
-  dockerImageName: wso2am-docker
+  dockerImageName: wso2apim
 service:
   type: NodePort
   ports:
