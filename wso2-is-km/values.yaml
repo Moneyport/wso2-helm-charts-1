@@ -13,7 +13,7 @@ rollingUpdate:
   maxSurge: 1
   maxUnavailable: 0
 image:
-  repositoryPath: hub.docker.com/r/mojaloop
+  repositoryPath: mojaloop
   tag: DEPLOYMENT_VALUE
   pullPolicy: Always
   dockerImageName: wso2iskm
