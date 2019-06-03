@@ -98,20 +98,20 @@ jobs:
             echo "Placeholder for test - Nothing to do here"
             #sh lint-charts.sh
 
-  build:
-    <<: *defaults_working_directory
-    <<: *defaults_docker_node
-    steps:
-      - checkout
-      - run:
-          <<: *defaults_Dependencies
-      - run:
-          <<: *defaults_environment
-      - run:
-          name: Update Helm Charts
-          command: |
-            ./build.sh ./workdir $CIRCLE_TAG
-            ./package.sh ./workdir ./wso2-repo/wso2-helm
+  # build:
+  #   <<: *defaults_working_directory
+  #   <<: *defaults_docker_node
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         <<: *defaults_Dependencies
+  #     - run:
+  #         <<: *defaults_environment
+  #     - run:
+  #         name: Update Helm Charts
+  #         command: |
+  #           ./build.sh ./workdir $CIRCLE_TAG
+  #           ./package.sh ./workdir ./wso2-repo/wso2-helm
 
   deploy:
     <<: *defaults_working_directory
@@ -168,18 +168,18 @@ workflows:
                 - /feature.*/
                 - /bugfix.*/
                 - gh-pages
-      - build:
-          context: org-global
-          requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
-            branches:
-              ignore:
-                - /feature.*/
-                - /bugfix.*/
-                - gh-pages
+      # - build:
+      #     context: org-global
+      #     requires:
+      #       - test
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #       branches:
+      #         ignore:
+      #           - /feature.*/
+      #           - /bugfix.*/
+      #           - gh-pages
       - deploy:
           context: org-global
           requires:
