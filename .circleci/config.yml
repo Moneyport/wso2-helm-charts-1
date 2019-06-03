@@ -54,29 +54,24 @@ defaults_publish_to_gh_pages: &defaults_publish_to_gh_pages
   command: |
     echo "Setting BASH_ENV..."
     source $BASH_ENV
-
-    echo "Fetching info from remote $GITHUB_PROJECT_USERNAME"
-    git fetch -q $GITHUB_PROJECT_USERNAME &> git.log
-
-    echo "Checking out $GITBOOK_TARGET_BRANCH"
-    git checkout -b $GITBOOK_TARGET_BRANCH $GITHUB_PROJECT_USERNAME/$GITBOOK_TARGET_BRANCH  &> git.log
-
-    echo "Pulling latest code from $GITBOOK_TARGET_BRANCH branch..."
-    git pull -q $GITHUB_PROJECT_USERNAME $GITBOOK_TARGET_BRANCH --rebase &> git.log
-
     echo "Package helm charts..."
     rm -rf ./workdir
-    ./build.sh ./workdir $CIRCLE_TAG
-    ./package.sh ./workdir ./wso2-repo/wso2-helm
+    sh build.sh ./workdir $CIRCLE_TAG
+    sh package.sh ./workdir ./repo
 
-    echo "Staging packaged Helm charts..."
-    git add -f wso2-repo/*.*
-
-    echo "Commiting changes..."
-    git commit -a -m "Updating release to $GITHUB_TAG"
-
-    echo "Publishing $GITHUB_TAG release to $GITBOOK_TARGET_BRANCH on github..."
-    git push -q $GITHUB_PROJECT_USERNAME $GITBOOK_TARGET_BRANCH &> git.log
+    mkdir -p ~/repo/branch
+    GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git clone $CIRCLE_REPOSITORY_URL ~/repo/branch
+    cd ~/repo/branch
+    git checkout gh-pages || git checkout --orphan gh-pages
+    cd -
+    cp -r wso2-repo ~/repo/branch
+    cd ~/repo/branch/wso2-repo/repo
+    sh index.sh
+    git add -A
+    git config --global user.email "cicd@modusbox.com"
+    git config --global user.name "CICD at ModusBox"
+    git commit -m "Automated deployment to GitHub Pages" --allow-empty
+    GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git push origin gh-pages
 
 jobs:
   setup:
@@ -122,6 +117,9 @@ jobs:
     <<: *defaults_working_directory
     <<: *defaults_docker_node
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "d2:71:0c:22:78:a9:a2:94:68:b2:6c:86:36:54:c6:10"
       - checkout
       - run:
           <<: *defaults_Dependencies

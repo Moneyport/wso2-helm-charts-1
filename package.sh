@@ -42,8 +42,8 @@ checkCommandResult
 
 cd $REPODIR
 
-echo “Creating Helm repo index...”
-helm repo index .
+#echo “Creating Helm repo index...”
+#helm repo index .
 #checkCommandResult
 
 shopt -s xpg_echo
