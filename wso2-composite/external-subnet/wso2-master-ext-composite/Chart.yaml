@@ -1,7 +1,0 @@
-apiVersion: v1
-description: Master Helm chart WSO2 "composite" profile composed by internal API manager, external API Manager and Identity Server
-name: wso2-master-ext-composite
-version: VERSION_PLACEHOLDER
-maintainers:
-  - name: David Fry
-    email: david.fry@modusbox.com

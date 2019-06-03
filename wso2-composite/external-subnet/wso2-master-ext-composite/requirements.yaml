@@ -1,6 +1,0 @@
-# requirements.yaml
-dependencies:
-- name: wso2-am-allinone-ext
-  version: VERSION_PLACEHOLDER
-  repository: "file://../wso2-am-allinone-ext"
-  condition: wso2-am-allinone-ext.enabled
