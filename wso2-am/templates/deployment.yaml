@@ -140,7 +140,7 @@ spec:
     {{- end }}
     {{- if or (.Values.persistentVolume.enabled) (.Values.dependentServices) }}
       initContainers:
-      {{- if .Values.persistentVolume.enabled }}
+      {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.subPathEnabled) }}
       - name: volume-mount-chown
         image: busybox
         command: ["sh", "-c", "chown -R {{ .Values.persistentVolume.fsowner.userid }}:{{ .Values.persistentVolume.fsowner.groupid }} {{ $wso2AppHome }}/{{ .Values.persistentVolume.mountToSubPath }}"]
