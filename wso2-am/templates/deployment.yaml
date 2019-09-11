@@ -138,9 +138,9 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.subPathEnabled) (.Values.dependentServices) }}
+    {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.enabled) (.Values.dependentServices) }}
       initContainers:
-      {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.subPathEnabled) }}
+      {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.enabled) }}
       - name: volume-mount-chown
         image: busybox
         command: ["sh", "-c", "chown -R {{ .Values.persistentVolume.fsowner.userid }}:{{ .Values.persistentVolume.fsowner.groupid }} {{ $wso2AppHome }}/{{ .Values.persistentVolume.mountToSubPath }}"]
