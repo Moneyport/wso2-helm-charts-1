@@ -138,7 +138,7 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if or (.Values.persistentVolume.enabled) (.Values.dependentServices) }}
+    {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.subPathEnabled) (.Values.dependentServices) }}
       initContainers:
       {{- if or (.Values.persistentVolume.enabled) (.Values.onlyMountPVC.subPathEnabled) }}
       - name: volume-mount-chown
