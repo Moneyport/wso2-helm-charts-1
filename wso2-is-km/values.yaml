@@ -44,7 +44,8 @@ config:
 #     name: dnsname for db here
 #     pauseTime: 15  
 persistentVolume:
-  enabled: true
+  pvEnabled: false
+  pvcEnabled: true
   basePath: /glusterfs
   purpose: wso2-is-km-shared-artifacts
   mountToSubPath: repository/deployment/server
@@ -53,6 +54,10 @@ persistentVolume:
   fsowner:
     userid: "802"
     groupid: "802" 
+  storageClass: gluster
+  accessMode: ReadWriteMany
+  pcvLabelSelectorModeEnabled: false
+  subPathEnabled: false
 
 readinessProbe:
   enabled: true

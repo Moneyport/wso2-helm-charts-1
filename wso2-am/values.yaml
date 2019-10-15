@@ -50,9 +50,9 @@ config:
 #     name: wso2-is-km
 #     pauseTime: 15  
 persistentVolume:
-  enabled: false
+  pvEnabled: false
+  pvcEnabled: true
   basePath: /glusterfs
-  baseSubPathEnabled: false
   purpose: wso2apim-gateway-shared-artifacts
   mountToSubPath: repository/deployment/server
   capacity: 
@@ -60,16 +60,11 @@ persistentVolume:
   fsowner:
     userid: "802"
     groupid: "802"
-  pvcNameOverride:
-    enabled: false
-    pvcName: FILLIFTRUE
-  subPathEnbled: false
-onlyMountPVC:
-  enabled: false
-  pvcName: FILLIFTRUE
-  mountToSubPath: repository/deployment/server
-  subPathEnbled: false
-  subPath: /
+  storageClass: gluster
+  accessMode: ReadWriteMany
+  pcvLabelSelectorModeEnabled: false
+  subPathEnabled: false
+  
 readinessProbe:
   enabled: true
   initialDelaySeconds: 300

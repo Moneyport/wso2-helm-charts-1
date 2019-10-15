@@ -1,4 +1,4 @@
-{{- if .Values.persistentVolume.enabled -}}
+{{- if .Values.persistentVolume.pvEnabled -}}
 
 apiVersion: v1
 kind: PersistentVolume
@@ -11,12 +11,8 @@ spec:
   capacity:
     storage: {{ .Values.persistentVolume.capacity.storage }}
   hostPath:
-    {{- if .Values.persistentVolume.baseSubPathEnabled }}
-    path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}/{{ .Values.persistentVolume.baseSubPath }}
-    {{- else }}
-    path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}
-    {{- end }}
+      path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}/{{ template "self.fullname" . }}
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.persistentVolume.accessMode }}
   persistentVolumeReclaimPolicy: Retain
 {{- end }}

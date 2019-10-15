@@ -1,4 +1,4 @@
-{{- if .Values.persistentVolume.enabled -}}
+{{- if .Values.persistentVolume.pvEnabled -}}
 
 apiVersion: v1
 kind: PersistentVolume
@@ -13,6 +13,6 @@ spec:
   hostPath:
       path: {{ .Values.persistentVolume.basePath }}/{{ .Release.Namespace }}/{{ template "self.fullname" . }}
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.persistentVolume.accessMode }}
   persistentVolumeReclaimPolicy: Retain
 {{- end }}

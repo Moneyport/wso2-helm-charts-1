@@ -1,22 +1,20 @@
-{{- if .Values.persistentVolume.enabled -}}
+{{- if .Values.persistentVolume.pvcEnabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-{{- if .Values.persistentVolume.pvcNameOverride.enabled }}
-  name: {{ .Values.persistentVolume.pvcNameOverride.pvcName }}
-{{- else}}
   name: {{ template "self.fullname" . }}
-{{- end }}
   labels:
 {{ include "self.labels" . | indent 4 }}
 spec:
   accessModes:
-    - ReadWriteMany
+    - {{ .Values.persistentVolume.accessMode }}
   resources:
     requests:
       storage: {{ .Values.persistentVolume.capacity.storage }}
-  storageClassName: ""
+  storageClassName: {{ .Values.persistentVolume.capacity.storageClass }}
+  {{- if .Values.persistentVolume.pcvLabelSelectorModeEnabled -}}
   selector:
     matchLabels:
       purpose: {{ .Values.persistentVolume.purpose }}
+  {{- end }}
 {{- end }}
