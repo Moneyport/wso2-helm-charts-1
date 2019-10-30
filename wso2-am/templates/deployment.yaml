@@ -38,6 +38,12 @@ spec:
         - name: {{ template "self.fullname" . }}
           image: {{ $wso2DockerRepo }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.persistentVolume.pvcEnabled }}
+          securityContext:
+            runAsUser: {{ .Values.persistentVolume.fsowner.userid }} 
+            runAsGroup: {{ .Values.persistentVolume.fsowner.groupid }}
+            fsGroup: {{ .Values.persistentVolume.fsowner.groupid }}
+          {{- end }}
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
@@ -123,16 +129,8 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- if or (.Values.persistentVolume.pvcEnabled) (.Values.dependentServices) }}
+    {{- if (.Values.dependentServices) }}
       initContainers:
-      {{- if .Values.persistentVolume.pvcEnabled }}
-      - name: volume-mount-chown
-        image: busybox
-        command: ["sh", "-c", "chown -R {{ .Values.persistentVolume.fsowner.userid }}:{{ .Values.persistentVolume.fsowner.groupid }} {{ $wso2AppHome }}/{{ .Values.persistentVolume.mountToSubPath }}"]
-        volumeMounts:
-        - name: {{ template "self.fullname" . }}-storage-volume
-          mountPath: {{ $wso2AppHome }}/{{ .Values.persistentVolume.mountToSubPath }}
-      {{- end }}
       {{- range $dependentService := .Values.dependentServices }} 
       - name: init-dependent-service-{{ $dependentService.name }}
         image: busybox
