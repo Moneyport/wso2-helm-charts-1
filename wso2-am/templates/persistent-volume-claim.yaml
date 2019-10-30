@@ -11,7 +11,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistentVolume.capacity.storage }}
-  storageClassName: {{ .Values.persistentVolume.capacity.storageClass }}
+  storageClassName: {{ .Values.persistentVolume.storageClass }}
   {{- if .Values.persistentVolume.pcvLabelSelectorModeEnabled -}}
   selector:
     matchLabels:
