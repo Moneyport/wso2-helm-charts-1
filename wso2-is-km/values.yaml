@@ -12,6 +12,7 @@ wso2amLibVolPath: /home/wso2carbon/wso2-lib-volume
 rollingUpdate:
   maxSurge: 1
   maxUnavailable: 0
+progressDeadlineSeconds: 600
 image:
   repositoryPath: mojaloop
   tag: DEPLOYMENT_VALUE
