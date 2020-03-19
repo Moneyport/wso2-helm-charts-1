@@ -4,11 +4,9 @@
 
 replicaCount: 1
 productName: wso2is-km
-productVersion: 5.6.0
+productVersion: 5.7.0
 wso2Home: /home/wso2carbon
-wso2amSecretVolPath: /home/wso2carbon/wso2-secret-volume
-wso2amConfigVolPath: /home/wso2carbon/wso2-config-volume
-wso2amLibVolPath: /home/wso2carbon/wso2-lib-volume
+
 rollingUpdate:
   maxSurge: 1
   maxUnavailable: 0
@@ -78,7 +76,17 @@ copyExtHostToEtcHosts:
 
 ingress:
   enabled: false
-
+secret:
+  externalSecretVolMountEnabled: false
+  wso2amSecretVolPath: /home/wso2carbon/wso2-secret-volume
+  externalSecretName: wso2iskm-secret
+configmap:
+  externalConfigMapVolMountEnabled: false
+  wso2amConfigVolPath: /home/wso2carbon/wso2-config-volume
+  externalConfigMapName: wso2iskm-confmap
+binconfigmap:
+  externalConfigMapVolMountEnabled: false
+  externalConfigMapName: wso2iskm-binmap
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -96,3 +104,41 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+dependencyConfigProps:
+  API_GW_HOST:
+    name: "API_GW_HOST"
+    propValue: "extgw.public.FQDN"
+    releasePrefixValue: false
+  API_STORE_HOST:
+    name: "API_STORE_HOST"
+    propValue: "extgw.public.FQDN"
+    releasePrefixValue: false
+  API_PUB_HOST:
+    name: "API_PUB_HOST"
+    propValue: "extgw.public.FQDN"
+    releasePrefixValue: false
+  WSO2_DB_HOST:
+    name: "WSO2_DB_HOST"
+    propValue: "mysql-wso2.mysql-wso2.svc.cluster.local"
+    releasePrefixValue: false
+  WSO2_DB_PORT:
+    name: "WSO2_DB_PORT"
+    propValue: 3306
+    releasePrefixValue: false
+  WSO2_DB_USER:
+    name: "WSO2_DB_USER"
+    propValue: "root"
+    releasePrefixValue: false
+  WSO2_DB_PW:
+    name: "WSO2_DB_PW"
+    propValue: "123soleil"
+    releasePrefixValue: false
+  ISKM_HOST:
+    name: "ISKM_HOST"
+    propValue: "iskm.public.FQDN"
+    releasePrefixValue: false
+  KEYSTORE_PASSWORD:
+    name: "KEYSTORE_PASSWORD"
+    propValue: "wso2carbon"
+    releasePrefixValue: false

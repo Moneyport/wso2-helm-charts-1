@@ -24,10 +24,8 @@ spec:
       labels:
 {{ include "self.labels" . | indent 8 }}      
       annotations:  
-        checksum-conffiles: {{ include (print $.Template.BasePath "/conffilessecret.yaml") . | sha256sum | trunc 63 }}
         checksum-binconf: {{ include (print $.Template.BasePath "/binconfigmap.yaml") . | sha256sum | trunc 63 }}
         checksum-confmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}        
-        checksum-secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum | trunc 63 }}
     spec:
       {{- if .Values.copyExtHostToEtcHosts.enabled }} 
       hostAliases:
@@ -78,16 +76,22 @@ spec:
             subPath: {{ .Values.persistentVolume.subPath }}
             {{- end }}
           {{- end }}
+          {{- if .Values.configmap.externalConfigMapVolMountEnabled }}
           - name: {{ template "self.fullname" . }}-config-volume
             readOnly: true
-            mountPath: "{{ .Values.wso2amConfigVolPath }}"
+            mountPath: "{{ .Values.configmap.wso2amConfigVolPath }}"
+          {{- end }}
+          {{- if .Values.secret.externalSecretVolMountEnabled }}
           - name: {{ template "self.fullname" . }}-secret-volume
             readOnly: true
-            mountPath: "{{ .Values.wso2amSecretVolPath }}"
+            mountPath: "{{ .Values.secret.wso2amSecretVolPath }}"
+          {{- end }}
+          {{- if .Values.binconfigmap.externalConfigMapVolMountEnabled }}
           - name: {{ template "self.fullname" . }}-bin-volume
             readOnly: true
             mountPath: "{{ $wso2AppHome }}/bin/copyConfigs.sh"
             subPath: "copyConfigs.sh"
+          {{- end }}         
       {{- if .Values.rbac.enabled }}      
       serviceAccountName: {{ template "self.fullname" . }}-{{ .Values.rbac.serviceAccount }}
       {{- end }}
@@ -97,15 +101,21 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "self.fullname" . }}
         {{- end }}
-        - name: {{ template "self.fullname" . }}-config-volume
-          secret:
-            secretName: {{ template "self.fullname" . }}-conffiles
+        {{- if .Values.secret.externalSecretVolMountEnabled }}
         - name: {{ template "self.fullname" . }}-secret-volume
           secret:
-            secretName: {{ template "self.fullname" . }}-files
+            secretName: {{ .Values.secret.externalSecretName }}
+        {{- end }}
+        {{- if .Values.configmap.externalConfigMapVolMountEnabled }}
+        - name: {{ template "self.fullname" . }}-config-volume
+          configMap:
+            name: {{ .Values.configmap.externalConfigMapName }}
+        {{- end }}
+        {{- if .Values.binconfigmap.externalConfigMapVolMountEnabled }}
         - name: {{ template "self.fullname" . }}-bin-volume
           configMap:
-            name: {{ template "self.fullname" . }}-bin
+            name: {{ .Values.binconfigmap.externalConfigMapName }}
+        {{- end }}
       imagePullSecrets:
         - name: {{ .Values.config.pullSecret }}
       {{- with .Values.resources }}

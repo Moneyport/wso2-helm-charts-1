@@ -6,9 +6,7 @@ replicaCount: 1
 productName: wso2am
 productVersion: 2.5.0
 wso2Home: /home/wso2carbon
-wso2amSecretVolPath: /home/wso2carbon/wso2-secret-volume
-wso2amConfigVolPath: /home/wso2carbon/wso2-config-volume
-wso2amLibVolPath: /home/wso2carbon/wso2-lib-volume
+
 rollingUpdate:
   maxSurge: 1
   maxUnavailable: 0
@@ -85,6 +83,18 @@ copyExtHostToEtcHosts:
 
 ingress:
   enabled: false
+
+secret:
+  externalSecretVolMountEnabled: false
+  wso2amSecretVolPath: /home/wso2carbon/wso2-secret-volume
+  externalSecretName: wso2am-secret
+configmap:
+  externalConfigMapVolMountEnabled: false
+  wso2amConfigVolPath: /home/wso2carbon/wso2-config-volume
+  externalConfigMapName: wso2am-confmap
+binconfigmap:
+  externalConfigMapVolMountEnabled: false
+  externalConfigMapName: wso2am-binmap
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious

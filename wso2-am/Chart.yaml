@@ -2,4 +2,4 @@ apiVersion: v1
 appVersion: "1.0"
 description: A Helm chart for Kubernetes install of wso2 API manager
 name: wso2-am
-version: VERSION_PLACEHOLDER
+version: 2.0.0
