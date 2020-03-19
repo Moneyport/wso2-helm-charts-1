@@ -24,10 +24,7 @@ spec:
       labels:
 {{ include "self.labels" . | indent 8 }}      
       annotations:  
-        checksum-conffiles: {{ include (print $.Template.BasePath "/conffilessecret.yaml") . | sha256sum | trunc 63 }}
-        checksum-binconf: {{ include (print $.Template.BasePath "/binconfigmap.yaml") . | sha256sum | trunc 63 }}
         checksum-confmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}        
-        checksum-secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum | trunc 63 }}
     spec:
       {{- if .Values.copyExtHostToEtcHosts.enabled }} 
       hostAliases:
