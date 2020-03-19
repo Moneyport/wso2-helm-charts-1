@@ -55,17 +55,14 @@ defaults_publish_to_gh_pages: &defaults_publish_to_gh_pages
     echo "Setting BASH_ENV..."
     source $BASH_ENV
     echo "Package helm charts..."
-    rm -rf ./workdir
-    bash build.sh ./workdir $CIRCLE_TAG
-    bash package.sh ./workdir ./repo
-
+    bash package.sh wso2-am $CIRCLE_TAG repo
+    bash package.sh wso2-is-km $CIRCLE_TAG repo
     mkdir -p ~/repo/branch
     GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git clone $CIRCLE_REPOSITORY_URL ~/repo/branch
     cd ~/repo/branch
     git checkout gh-pages || git checkout --orphan gh-pages
     cd -
     cp -r repo ~/repo/branch
-    bash index.sh ~/repo/branch/repo
     cd ~/repo/branch/repo
     git add -A
     git config --global user.email "cicd@modusbox.com"
